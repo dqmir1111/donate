@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support</title>
+    <title>Support | dqmjrka</title>
     <style>
         body {
             background-color: #f5f5f7;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
             font-family: -apple-system, system-ui, sans-serif;
-            overflow: hidden; /* Чтобы toast не создавал прокрутку */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
         }
 
         .support-btn {
             background: #ffffff;
             border-radius: 28px;
-            padding: 30px 45px;
+            padding: 25px;
             text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(0,0,0,0.05);
@@ -37,56 +46,39 @@
         }
 
         .top-text {
-            display: block;
             font-weight: 700;
             font-size: 22px;
             color: #1d1d1f;
             margin-bottom: 4px;
         }
 
-        .heart-icon {
-            color: #ff0000;
-            font-size: 24px;
-            vertical-align: middle;
-            margin-left: 6px;
-        }
-
         .mid-text {
-            display: block;
-            font-size: 14px;
+            font-size: 13px;
             color: #888;
             margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .card-num-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-num {
-            font-size: 18px;
+        .val-text {
+            font-size: 16px;
             color: #21a038;
             font-family: 'Courier New', Courier, monospace;
             font-weight: 700;
-            letter-spacing: 1.5px;
-            pointer-events: none; /* Запрещает клик по самому тексту */
+            letter-spacing: 1px;
+            pointer-events: none; /* Запрет на выделение/звонок */
+            word-break: break-all;
+            max-width: 100%;
         }
 
-        /* Убирает стилизацию под ссылку для номера телефона на iOS */
-        a[href^="tel"] {
-            color: inherit;
-            text-decoration: none;
-            pointer-events: none;
+        /* Стиль для ЕРИП (счет обычно длиннее, уменьшим шрифт) */
+        .erip-val {
+            font-size: 13px;
         }
 
-        /* Стиль уведомления */
         #copy-toast {
             visibility: hidden;
             min-width: 250px;
-            margin-left: -125px;
             background-color: #333;
             color: #fff;
             text-align: center;
@@ -95,8 +87,9 @@
             position: fixed;
             z-index: 1000;
             left: 50%;
+            transform: translateX(-50%);
             bottom: 30px;
-            font-size: 16px;
+            font-size: 15px;
             opacity: 0;
             transition: opacity 0.3s, bottom 0.3s;
         }
@@ -110,32 +103,38 @@
 </head>
 <body>
 
-    <div class="support-btn" onclick="copyCard()">
-        <span class="top-text">Беларусбанк❤️</span>
-        <span class="mid-text">Номер карты</span>
-        <div class="card-num-container">
-            <span class="card-num">9112 3801 7910 7778</span>
+    <div class="container">
+        <div class="support-btn" onclick="copyValue('9112380179107778', 'Беларусбанк')">
+            <span class="top-text">Беларусбанк❤️</span>
+            <span class="mid-text">Номер карты</span>
+            <span class="val-text">9112 3801 7910 7778</span>
+        </div>
+
+        <div class="support-btn" onclick="copyValue('5326580001442349', 'Приорбанк')">
+            <span class="top-text">Приорбанк🧡</span>
+            <span class="mid-text">Номер карты</span>
+            <span class="val-text">5326 5800 0144 2349</span>
+        </div>
+
+        <div class="support-btn" onclick="copyValue('BY81PJCB30141720081012774933', 'ЕРИП')">
+            <span class="top-text">ЕРИП💙</span>
+            <span class="mid-text">Номер счета</span>
+            <span class="val-text erip-val">BY81 PJCB 3014 1720 0810 1277 4933</span>
         </div>
     </div>
 
-    <div id="copy-toast">Номер карты скопирован!</div>
+    <div id="copy-toast">Скопировано!</div>
 
     <script>
-        function copyCard() {
-            const num = "9112380179107778";
-            
-            // Используем navigator.clipboard.writeText для копирования
-            navigator.clipboard.writeText(num).then(() => {
-                // Показать уведомление
+        function copyValue(value, name) {
+            navigator.clipboard.writeText(value).then(() => {
                 const toast = document.getElementById("copy-toast");
+                toast.innerText = name + " скопирован!";
                 toast.classList.add("show");
                 
-                // Убрать уведомление через 2 секунды
                 setTimeout(() => {
                     toast.classList.remove("show");
                 }, 2000);
-            }).catch(err => {
-                console.error('Ошибка копирования: ', err);
             });
         }
     </script>
