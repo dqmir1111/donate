@@ -13,18 +13,22 @@
             min-height: 100vh;
             margin: 0;
             font-family: -apple-system, system-ui, sans-serif;
+            overflow: hidden; /* Чтобы toast не создавал прокрутку */
         }
 
         .support-btn {
             background: #ffffff;
             border-radius: 28px;
-            padding: 30px 50px;
+            padding: 30px 45px;
             text-align: center;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(0,0,0,0.05);
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
             user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .support-btn:hover {
@@ -40,6 +44,13 @@
             margin-bottom: 4px;
         }
 
+        .heart-icon {
+            color: #ff0000;
+            font-size: 24px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+
         .mid-text {
             display: block;
             font-size: 14px;
@@ -49,52 +60,82 @@
             letter-spacing: 1px;
         }
 
+        .card-num-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .card-num {
-            display: block;
             font-size: 18px;
             color: #21a038;
             font-family: 'Courier New', Courier, monospace;
             font-weight: 700;
             letter-spacing: 1.5px;
+            pointer-events: none; /* Запрещает клик по самому тексту */
         }
 
+        /* Убирает стилизацию под ссылку для номера телефона на iOS */
+        a[href^="tel"] {
+            color: inherit;
+            text-decoration: none;
+            pointer-events: none;
+        }
+
+        /* Стиль уведомления */
         #copy-toast {
             visibility: hidden;
-            background-color: #1d1d1f;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
             color: #fff;
+            text-align: center;
             border-radius: 50px;
-            padding: 12px 24px;
+            padding: 16px;
             position: fixed;
-            bottom: 30px;
-            font-size: 14px;
-            opacity: 0;
-            transition: 0.3s;
             z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
         }
 
         #copy-toast.show {
             visibility: visible;
             opacity: 1;
+            bottom: 50px;
         }
     </style>
 </head>
 <body>
 
     <div class="support-btn" onclick="copyCard()">
-        <span class="top-text">Поддержать❤️</span>
+        <span class="top-text">Беларусбанк❤️</span>
         <span class="mid-text">Номер карты</span>
-        <span class="card-num">2202 2063 9370 9519</span>
+        <div class="card-num-container">
+            <span class="card-num">9112 3801 7910 7778</span>
+        </div>
     </div>
 
-    <div id="copy-toast">Номер скопирован!</div>
+    <div id="copy-toast">Номер карты скопирован!</div>
 
     <script>
         function copyCard() {
-            const num = "2202206393709519";
+            const num = "9112380179107778";
+            
+            // Используем navigator.clipboard.writeText для копирования
             navigator.clipboard.writeText(num).then(() => {
+                // Показать уведомление
                 const toast = document.getElementById("copy-toast");
                 toast.classList.add("show");
-                setTimeout(() => { toast.classList.remove("show"); }, 2000);
+                
+                // Убрать уведомление через 2 секунды
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
             });
         }
     </script>
